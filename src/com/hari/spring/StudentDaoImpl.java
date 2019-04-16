@@ -32,16 +32,18 @@ public class StudentDaoImpl implements StudentDao {
 //		this.sessionFactory=sessionFactory2;
 //	}
 
-	@Override
+//	@Override
 	public Boolean updateRecord(StudentEntity studentEntity) {
 		System.out.println("DAOOOOOOO");
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		//		studentEntity = (StudentEntity) session.get(StudentEntity.class, 1);
-
-//		session.update(studentEntity);
-		session.save(studentEntity);
-
+		
+		StudentEntity studentEntityFromDB =  session.get(StudentEntity.class, studentEntity.getRollNo());
+		studentEntityFromDB.setAge(studentEntity.getAge());
+		studentEntityFromDB.setMobileNumber(studentEntity.getMobileNumber());
+		studentEntityFromDB.setName(studentEntity.getName());
+		
+		session.update(studentEntityFromDB);
 		session.getTransaction().commit();
 		session.close();
 		sessionFactory.close();

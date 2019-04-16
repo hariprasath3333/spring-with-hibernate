@@ -33,10 +33,11 @@ public class StudentController {
 	public ModelAndView hello(){
 		ModelAndView model = new ModelAndView("StudentEntry");
 		StudentEntity studentEntity = new StudentEntity(); 
+		studentEntity.setRollNo(1);
 		studentEntity.setAge(19);
 		studentEntity.setName("Jack");
 		studentEntity.setMobileNumber(9870);
-		studentDao.updateRecord(studentEntity);
+ 		studentDao.updateRecord(studentEntity);
 		return model;
 	}
 
@@ -48,6 +49,7 @@ public class StudentController {
 		Student student = new Student(); 
 		student.setAge(19);
 		student.setName("Jack");
+		student.setMobileNumber(9870);
 		//		Address a = new Address();
 		//		a.setCountry("UK");
 		//		student.setAddress(a);
