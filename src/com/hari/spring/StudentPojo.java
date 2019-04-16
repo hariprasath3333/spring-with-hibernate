@@ -7,6 +7,7 @@ public class StudentPojo {
 		private List<Student> studentList;
 		
 		private Student student;
+		
 
 		public Student getStudent() {
 			return student;
