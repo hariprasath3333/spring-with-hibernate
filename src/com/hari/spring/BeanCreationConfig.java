@@ -39,6 +39,11 @@ public class BeanCreationConfig extends WebMvcConfigurationSupport {
 	public StudentDaoImpl studentDao(){
 		return new StudentDaoImpl();
 	}
+	
+	@Bean
+	public AServiceFile aServiceFile(StudentDao studentDdao){
+		return new AServiceImpl(studentDdao);
+	}
 
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
@@ -55,6 +60,8 @@ public class BeanCreationConfig extends WebMvcConfigurationSupport {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/hibernate");
+		//batch insert in mysql{when using IDENTITY generator, batch insert wont work in mysql}
+		//dataSource.setUrl("jdbc:mysql://localhost:3306/hibernate/rewriteBatchedStatements=true");
 		dataSource.setUsername("root");
 		dataSource.setPassword("root");
 
@@ -66,6 +73,7 @@ public class BeanCreationConfig extends WebMvcConfigurationSupport {
 		Properties hibernateProperties = new Properties();
 		hibernateProperties.setProperty(
 				"hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
+		hibernateProperties.setProperty("hibernate.jdbc.batch_size", "50");
 		return hibernateProperties;
 	}
 

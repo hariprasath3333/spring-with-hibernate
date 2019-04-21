@@ -2,7 +2,10 @@ package com.hari.spring;
 
 import java.util.List;
 
-public interface StudentDao {
+import org.springframework.stereotype.Service;
+
+
+public interface AServiceFile {
 	
 	public boolean updateStudentList(List<Student> studentList);
 	public boolean deleteStudentList(List<Student> studentList);
@@ -13,4 +16,5 @@ public interface StudentDao {
 	public boolean deleteStudent(Student student);
 	public boolean insertStudent(Student student);
 	public Student displayStudent(Student student);
+	
 }

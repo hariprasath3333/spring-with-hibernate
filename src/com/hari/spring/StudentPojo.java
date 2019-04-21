@@ -8,6 +8,16 @@ public class StudentPojo {
 		
 		private Student student;
 		
+		private int rollNo;
+		
+
+		public int getRollNo() {
+			return rollNo;
+		}
+
+		public void setRollNo(int rollNo) {
+			this.rollNo = rollNo;
+		}
 
 		public Student getStudent() {
 			return student;

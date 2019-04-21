@@ -1,6 +1,8 @@
 package com.hari.spring;
 
+import lombok.Data;
 
+//@Data
 public class Student {
 
 

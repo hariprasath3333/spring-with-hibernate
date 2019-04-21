@@ -15,57 +15,61 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class StudentController {
-	@Autowired
-	private StudentDao studentDao;
-
+	
 //	@Autowired
-//	public void setStudentDao(StudentDao studentDao) {
-//		this.studentDao = studentDao;
-//	}
+//	private StudentDao studentDao;
+
+	@Autowired
+	private AServiceFile aServiceFile;
 
 
 	@RequestMapping(value ="/hi", method = RequestMethod.GET)
 	public ModelAndView hello(){
 		ModelAndView model = new ModelAndView("StudentEntry");
-		StudentEntity studentEntity = new StudentEntity(); 
+		Student studentEntity = new Student(); 
 		studentEntity.setRollNo(1);
 		studentEntity.setAge(19);
 		studentEntity.setName("Jack");
 		studentEntity.setMobileNumber(9870);
- 		studentDao.updateRecord(studentEntity);
+		aServiceFile.updateStudent(studentEntity);
 		return model;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/getStudent",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Student getStudent(@RequestParam int rollNo){
+//		int rollNo = studentPojo.getRollNo();
+		Student s = new Student();
+		s.setRollNo(rollNo);
+		return aServiceFile.displayStudent(s);
+	}
 
 	@ResponseBody
-	@RequestMapping(value = "/students",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ArrayList<Student> getStudentList(){
-		ArrayList<Student> sudentList = new ArrayList<>();
-		Student student = new Student(); 
-		student.setAge(19);
-		student.setName("Jack");
-		student.setMobileNumber(9870);
-		//		Address a = new Address();
-		//		a.setCountry("UK");
-		//		student.setAddress(a);
-		sudentList.add(student);
-		return sudentList;
+	@RequestMapping(value = "/getStudentList",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Student> getStudentList(){
+		
+		return aServiceFile.displayStudentList();
+		
 	}
 
 
 	@ResponseBody
 	@RequestMapping(value = "/updateStudentList",method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Boolean> updateStudentList(@RequestBody StudentPojo studentPojo){
-		List<Student> sudentList = studentPojo.getStudentList();
-		Student student = new Student(); 
-		student.setAge(19);
-		student.setName("Jack");
-
+		List<Student> studentList = studentPojo.getStudentList();
+//		Student student = new Student(); 
+//		student.setRollNo(1);
+//		student.setAge(19);
+//		student.setName("Jack");
+//		student.setMobileNumber(9870);
+//		studentList.add(student);
+		aServiceFile.updateStudentList(studentList);   
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 
@@ -76,19 +80,71 @@ public class StudentController {
 		HttpStatus httpStatus;
 		Boolean status;
 		try{
-			StudentEntity studentEntity = new StudentEntity();
-			studentEntity.setAge(student.getAge());
-			studentEntity.setMobileNumber(student.getMobileNumber());
-			studentEntity.setName(student.getName());
-			//			SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(StudentEntity.class).buildSessionFactory();
-			studentDao.updateRecord(studentEntity);
+//			student.setRollNo(1);
+//			student.setAge(19);
+//			student.setName("Jack");
+//			student.setMobileNumber(9870);
+			aServiceFile.updateStudent(student);
 			httpStatus = HttpStatus.OK;
 			status = true;
-
 		}catch(Exception e){
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 			status = false;
 		}
 		return new ResponseEntity<Boolean>(status, httpStatus);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deletetudentList",method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> deletetudentList(@RequestBody StudentPojo studentPojo){
+		List<Student> studentList = studentPojo.getStudentList();
+//		Student student = new Student(); 
+//		student.setRollNo(1);
+//		student.setAge(19);
+//		student.setName("Jack");
+//		student.setMobileNumber(9870);
+//		studentList.add(student);
+		aServiceFile.deleteStudentList(studentList);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteStudent",method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> deleteStudent(@RequestBody StudentPojo studentPojo){
+		Student student = studentPojo.getStudent();
+//		student.setRollNo(1);
+//		student.setAge(19);
+//		student.setName("Jack");
+//		student.setMobileNumber(9870);
+		aServiceFile.deleteStudent(student);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+	
+	
+	//wont work in mysql if ID generator is used
+	@ResponseBody
+	@RequestMapping(value = "/insertStudentList",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> insertStudentList(@RequestBody StudentPojo studentPojo){
+		List<Student> studentList = studentPojo.getStudentList();
+//		Student student = new Student(); 
+//		student.setRollNo(1);
+//		student.setAge(19);
+//		student.setName("Jack");
+//		student.setMobileNumber(9870);
+//		studentList.add(student);    
+		aServiceFile.insertStudentList(studentList);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/insertStudent",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> insertStudent(@RequestBody StudentPojo studentPojo){
+		Student student = studentPojo.getStudent();
+//		student.setRollNo(1);
+//		student.setAge(19);
+//		student.setName("Jack");
+//		student.setMobileNumber(9870);
+		aServiceFile.insertStudent(student);
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 	}
 }
