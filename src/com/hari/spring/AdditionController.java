@@ -10,7 +10,6 @@ public class AdditionController {
 	@RequestMapping("add")
 	public ModelAndView add(){
 		ModelAndView modelAndView = new ModelAndView("Addition");
-//		modelAndView.addAllObjects(modelMap);
 		return modelAndView;
 	}
 	
